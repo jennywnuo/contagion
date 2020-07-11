@@ -3,18 +3,20 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 /**
  * A person in a virus simulation. 
  * 
- * @author Ella DeGuzman
+ * @author Ella DeGuzman and Jenny Wang
  * @version 1.0
  */
 public class Person extends Actor
 {
     private static final int INFECTION_TIME = 200;
+    private static final int SUSCEPTIBLE = 2;
     
     private int infection = 0;
     private boolean isImmune = false;
     private boolean isIsolating; 
     
     private static int numInfected = 0;
+    private static int numImmune = 0; 
     
     /**
      * Return the number of infected persons 
@@ -29,6 +31,7 @@ public class Person extends Actor
      */public static void reset()
     {
         numInfected = 0;
+        numImmune = 0; 
     }
     
     /**
@@ -55,7 +58,12 @@ public class Person extends Actor
         }
         if (isInfected()) {
           infectOthers();
-          heal();
+          if (numInfected > SUSCEPTIBLE){ 
+              heal();
+            }
+        }
+        if (isIsolating && numImmune > 60){
+            moveSlower();
         }
     }
     
@@ -65,6 +73,20 @@ public class Person extends Actor
     private void move()
     {
         move(4);
+        if (isAtEdge()) {
+            turn(87);
+        }
+        if (Greenfoot.getRandomNumber(100) < 20) {
+            turn(Greenfoot.getRandomNumber(61)-30);
+        }
+    }
+    
+    /**
+     * Move the person randomly on screen slower.
+     */
+    private void moveSlower()
+    {
+        move(2);
         if (isAtEdge()) {
             turn(87);
         }
@@ -93,7 +115,7 @@ public class Person extends Actor
             infection = INFECTION_TIME;
             numInfected++;
             setImage("infected.png");
-            isImmune = true;
+            isImmune = true;            
         }
     }
     
@@ -112,10 +134,14 @@ public class Person extends Actor
     {
         if (isInfected()) {
             infection--;
-            if (infection == 0) {
+        }
+        if (infection == 0) {
                 setImage("immune.png");
                 numInfected--;
+                isImmune = true;
+                numImmune++;
             }
         }
     }
-}
+    
+

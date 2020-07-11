@@ -3,7 +3,7 @@ import java.util.List;
 /**
  * The world in which the people will move. 
  * 
- * @author Ella Deguzman
+ * @author Ella Deguzman and Jenny Wang
  * @version 1.0
  */
 public class MyWorld extends World
@@ -79,6 +79,7 @@ public class MyWorld extends World
             boolean isolate = Greenfoot.getRandomNumber(100) < percentIsolating;
             
             addObject(new Person(isolate), x, y);
+            
         }
         showText("Isolating: " + percentIsolating + "%", 700, 20);
     }
